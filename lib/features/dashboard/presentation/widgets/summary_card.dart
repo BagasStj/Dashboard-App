@@ -16,15 +16,16 @@ class SummarySection extends StatelessWidget {
       crossAxisCount: crossAxisCount,
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
-      childAspectRatio: 1.5,
+      childAspectRatio: 1.6,
       children: const [
         SummaryCard(
           title: 'Total Users',
           value: '1,234',
-          icon: Icons.people,
+          icon: Icons.group_outlined,
           color: Colors.blue,
           trend: '+12%',
           isPositive: true,
+          gradientColors: [Color(0xFFE7F0FF), Colors.white],
         ),
         SummaryCard(
           title: 'Revenue',
@@ -33,14 +34,16 @@ class SummarySection extends StatelessWidget {
           color: Colors.green,
           trend: '+8%',
           isPositive: true,
+          gradientColors: [Color(0xFFE6F7EC), Colors.white],
         ),
         SummaryCard(
           title: 'Orders',
           value: '856',
-          icon: Icons.shopping_cart,
+          icon: Icons.shopping_cart_outlined,
           color: Colors.orange,
           trend: '-3%',
           isPositive: false,
+          gradientColors: [Color(0xFFFFF3E0), Colors.white],
         ),
         SummaryCard(
           title: 'Conversion',
@@ -49,6 +52,7 @@ class SummarySection extends StatelessWidget {
           color: Colors.purple,
           trend: '+2%',
           isPositive: true,
+          gradientColors: [Color(0xFFF3E5F5), Colors.white],
         ),
       ],
     );
@@ -62,6 +66,7 @@ class SummaryCard extends StatefulWidget {
   final Color color;
   final String trend;
   final bool isPositive;
+  final List<Color> gradientColors;
 
   const SummaryCard({
     Key? key,
@@ -71,104 +76,51 @@ class SummaryCard extends StatefulWidget {
     required this.color,
     required this.trend,
     required this.isPositive,
+    required this.gradientColors,
   }) : super(key: key);
 
   @override
   State<SummaryCard> createState() => _SummaryCardState();
 }
 
-class _SummaryCardState extends State<SummaryCard>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-  bool _isHovered = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 200),
-      vsync: this,
-    );
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.03).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _SummaryCardState extends State<SummaryCard> {
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) {
-        setState(() {
-          _isHovered = true;
-          _controller.forward();
-        });
-      },
-      onExit: (_) {
-        setState(() {
-          _isHovered = false;
-          _controller.reverse();
-        });
-      },
-      child: ScaleTransition(
-        scale: _scaleAnimation,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(24),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                widget.color.withOpacity(0.15),
-                Colors.white,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: widget.color.withOpacity(0.1),
-                blurRadius: _isHovered ? 16 : 8,
-                offset: const Offset(0, 4),
-                spreadRadius: _isHovered ? 2 : 0,
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: widget.gradientColors,
+        ),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: widget.color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Icon(
-                      widget.icon,
-                      color: widget.color,
-                      size: 24,
-                    ),
+                  Icon(
+                    widget.icon,
+                    color: widget.color,
+                    size: 24,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
+                      horizontal: 8,
+                      vertical: 4,
                     ),
                     decoration: BoxDecoration(
                       color: widget.isPositive
                           ? Colors.green.withOpacity(0.1)
                           : Colors.red.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -186,8 +138,8 @@ class _SummaryCardState extends State<SummaryCard>
                           style: TextStyle(
                             color:
                                 widget.isPositive ? Colors.green : Colors.red,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
                           ),
                         ),
                       ],
@@ -195,33 +147,25 @@ class _SummaryCardState extends State<SummaryCard>
                   ),
                 ],
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.title,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          color: Colors.grey[600],
-                          fontWeight: FontWeight.w500,
-                        ),
-                  ),
-                  const SizedBox(height: 8),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      widget.value,
-                      style:
-                          Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.grey[900],
-                              ),
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 12),
+              Text(
+                widget.title,
+                style: TextStyle(
+                  color: Colors.grey[600],
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
             ],
           ),
-        ),
+          Text(
+            widget.value,
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[900],
+                ),
+          ),
+        ],
       ),
     );
   }
