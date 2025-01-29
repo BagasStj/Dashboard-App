@@ -16,7 +16,7 @@ class SummarySection extends StatelessWidget {
       crossAxisCount: crossAxisCount,
       mainAxisSpacing: 16,
       crossAxisSpacing: 16,
-      childAspectRatio: 1.6,
+      childAspectRatio: 1.4,
       children: const [
         SummaryCard(
           title: 'Total Users',
@@ -95,7 +95,7 @@ class _SummaryCardState extends State<SummaryCard> {
           colors: widget.gradientColors,
         ),
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,12 +109,12 @@ class _SummaryCardState extends State<SummaryCard> {
                   Icon(
                     widget.icon,
                     color: widget.color,
-                    size: 24,
+                    size: 22,
                   ),
                   Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
+                      horizontal: 6,
+                      vertical: 3,
                     ),
                     decoration: BoxDecoration(
                       color: widget.isPositive
@@ -147,12 +147,12 @@ class _SummaryCardState extends State<SummaryCard> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
               Text(
                 widget.title,
                 style: TextStyle(
                   color: Colors.grey[600],
-                  fontSize: 14,
+                  fontSize: 13,
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -160,7 +160,7 @@ class _SummaryCardState extends State<SummaryCard> {
           ),
           Text(
             widget.value,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.grey[900],
                 ),
