@@ -4,7 +4,7 @@ import '../widgets/header_widget.dart';
 import '../widgets/summary_card.dart';
 import '../widgets/chart_card.dart';
 import '../widgets/table_card.dart';
-import '../widgets/top_worst_card.dart';
+import '../widgets/top_products_card.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -50,35 +50,35 @@ class DashboardPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 24),
                   if (isWideScreen)
-                    IntrinsicHeight(
+                    const IntrinsicHeight(
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Expanded(
                             flex: 2,
                             child: Column(
-                              children: const [
+                              children: [
                                 ChartCard(),
                                 SizedBox(height: 24),
                                 TableCard(),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 24),
-                          const Expanded(
-                            child: TopWorstCard(),
+                          SizedBox(width: 24),
+                          Expanded(
+                            child: TopProductsCard(),
                           ),
                         ],
                       ),
                     )
                   else
-                    Column(
-                      children: const [
+                    const Column(
+                      children: [
                         ChartCard(),
                         SizedBox(height: 24),
                         TableCard(),
                         SizedBox(height: 24),
-                        TopWorstCard(),
+                        TopProductsCard(),
                       ],
                     ),
                 ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './dashboard_page.dart';
+import './profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -11,11 +12,49 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
 
+  void _onItemTapped(int index) {
+    if (index == 3) {
+      // Jika logout ditekan
+      _showLogoutDialog();
+    } else {
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
+  }
+
+  Future<void> _showLogoutDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text('Logout'),
+              onPressed: () {
+                // Implement logout logic here
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   final List<Widget> _pages = [
     const DashboardPage(),
     const Center(child: Text('Analytics')),
-    const Center(child: Text('Profile')),
-    const Center(child: Text('Settings')),
+    const ProfilePage(),
+    const SizedBox(), // Empty widget for logout
   ];
 
   @override
@@ -34,11 +73,7 @@ class _HomePageState extends State<HomePage> {
         ),
         child: BottomNavigationBar(
           currentIndex: _selectedIndex,
-          onTap: (index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-          },
+          onTap: _onItemTapped,
           type: BottomNavigationBarType.fixed,
           backgroundColor: Colors.white,
           selectedItemColor: Theme.of(context).colorScheme.primary,
@@ -60,9 +95,9 @@ class _HomePageState extends State<HomePage> {
               label: 'Profile',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined),
-              activeIcon: Icon(Icons.settings),
-              label: 'Settings',
+              icon: Icon(Icons.logout_outlined),
+              activeIcon: Icon(Icons.logout),
+              label: 'Logout',
             ),
           ],
         ),

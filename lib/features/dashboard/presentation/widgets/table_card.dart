@@ -8,6 +8,7 @@ class TableCard extends StatelessWidget {
     return Card(
       elevation: 4,
       shadowColor: Colors.black26,
+      color: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
